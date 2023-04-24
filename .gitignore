@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# auth data
+src/utils/auth_data.py
+
 # C extensions
 *.so
 
