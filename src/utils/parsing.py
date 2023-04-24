@@ -3,6 +3,7 @@ import requests
 from time import sleep
 from tqdm import tqdm
 from collections import Counter
+from typing import Union
 
 from utils.auth_data import token
 
@@ -161,6 +162,69 @@ def get_post_data(post: dict) -> dict:
     }
     return post_data 
 
+
+def get_users(user_ids: list, count: int) -> list:
+    """Gets user info from the VK API for a list of user IDs.
+
+    Args:
+        user_ids (list): The list of user IDs.
+        count (int): The number of users to request per API call.
+        access_token (str): The access token for the VK API.
+    Returns:
+        list: The list of user info objects.
+    """  
+
+    num_users = len(user_ids)
+    all_users = []
+    for offset in tqdm(range(0, num_users, count)):
+        url = f"https://api.vk.com/method/users.get"
+        req = requests.get(url, params={
+            'user_ids': str(user_ids[offset:offset+count])[1:-1], 
+            'access_token': token, 
+            'fields': 'photo_max, sex, bdate, city, country',
+            'v':5.131
+            })
+        
+        users = req.json()['response']
+        all_users.extend(users)
+    return all_users
+
+
+import statistics
+
+def get_median_friend_age(user_id: int) -> Union[int, None]:
+    """Get the median age of a user's friends on VK.
+    Args:
+        user_id (int): The ID of the user
+        vk_token (str): The access token for the VK API
+    Returns:
+        int: The median age of the user's friends, or None if there was an error.
+    """
+    # Make an API request to get the user's friends list
+    url = f'https://api.vk.com/method/friends.get'
+    req = requests.get(url, params={
+            'user_id': user_id,
+            'access_token': token, 
+            'fields': 'bdate',
+            'v':5.131
+            })
+    response = req.json()
+    # Extract the birthdates of the user's friends and calculate their ages
+    bdates = []
+    try:
+        for friend in response['response']['items']:
+            if 'bdate' in friend:
+                bdate = friend['bdate'].split('.')
+                if len(bdate) == 3:
+                    bdates.append(int(bdate[2]))
+                                
+        # Calculate the median age of the user's friends
+        median_age = statistics.median([2023 - bdate for bdate in bdates])
+        return median_age
+    except:
+        sleep(0.5)
+        return None
+    
 
 def get_user_location(user_id: int, token: str) -> tuple:
     """Retrieves a user's city and country based on their friends' locations.
