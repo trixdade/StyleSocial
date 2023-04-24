@@ -22,7 +22,7 @@ def write_json(data, filename, mode='w', overwrite=False, encoding='utf-8'):
         json.dump(data, file, indent=2, ensure_ascii=False)
 
 
-def get_posts_likes(
+def get_post_likes(
     owner_id: int,
     item_id: int, 
     count: int = 1000, 
@@ -89,7 +89,7 @@ def get_group_info(group_name: str, number_of_posts: int) -> list:
     count = 100  
 
     # number of counts needed to parse such number of posts
-    counts_amount = number_of_posts // count + 1  
+    counts_amount = number_of_posts // count
 
     raw_posts = get_posts(group_name, count=count, counts_amount=counts_amount)  
     posts_data = [get_post_data(post) for post in raw_posts]

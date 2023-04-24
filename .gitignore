@@ -5,6 +5,9 @@ __pycache__/
 # auth data
 src/utils/auth_data.py
 
+# venv data
+venv
+
 # C extensions
 *.so
 
