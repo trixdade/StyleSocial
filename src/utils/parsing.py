@@ -1,9 +1,10 @@
 import json
+from typing import Union
 import requests
 from time import sleep
 from tqdm import tqdm
 from collections import Counter
-from typing import Union
+import statistics
 
 from utils.auth_data import token
 
@@ -169,7 +170,6 @@ def get_users(user_ids: list, count: int) -> list:
     Args:
         user_ids (list): The list of user IDs.
         count (int): The number of users to request per API call.
-        access_token (str): The access token for the VK API.
     Returns:
         list: The list of user info objects.
     """  
@@ -190,13 +190,10 @@ def get_users(user_ids: list, count: int) -> list:
     return all_users
 
 
-import statistics
-
 def get_median_friend_age(user_id: int) -> Union[int, None]:
     """Get the median age of a user's friends on VK.
     Args:
         user_id (int): The ID of the user
-        vk_token (str): The access token for the VK API
     Returns:
         int: The median age of the user's friends, or None if there was an error.
     """
@@ -226,12 +223,11 @@ def get_median_friend_age(user_id: int) -> Union[int, None]:
         return None
     
 
-def get_user_location(user_id: int, token: str) -> tuple:
+def get_user_location(user_id: int) -> tuple:
     """Retrieves a user's city and country based on their friends' locations.
 
     Args:
         user_id (int): The ID of the user.
-        token (str): An access token for the VK API.
 
     Returns:
         tuple: A tuple containing:
