@@ -223,7 +223,7 @@ def get_median_friend_age(user_id: int) -> Union[int, None]:
         return None
     
 
-def get_user_location(user_id: int) -> tuple:
+def get_user_location(user_id: int) -> Union[tuple, str]:
     """Retrieves a user's city and country based on their friends' locations.
 
     Args:
@@ -250,7 +250,7 @@ def get_user_location(user_id: int) -> tuple:
              
         if response.get('error')['error_code'] == 29:       
             print('Limit has reached')
-            return None, None        
+            return 'limit'    
         else:       
             return None, None   
     
