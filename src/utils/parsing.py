@@ -1,5 +1,5 @@
 import json
-from typing import Union
+from typing import Union, Optional
 import requests
 from time import sleep
 from tqdm import tqdm
@@ -190,7 +190,7 @@ def get_users(user_ids: list, count: int) -> list:
     return all_users
 
 
-def get_median_friend_age(user_id: int) -> Union[int, None]:
+def get_median_friend_age(user_id: int) -> Optional[int]:
     """Get the median age of a user's friends on VK.
     Args:
         user_id (int): The ID of the user
